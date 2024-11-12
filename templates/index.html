@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
+		<style>
+			#my_camera{
+				width:320px;
+				height:240px;
+				border:1px solid #c0c0c0;
+			}
+		</style>
+	</head>
+	<body>
+		<br><br>
+		<div class="w3-row-padding">
+			<div class="w3-half w3-card-4 w3-round-xlarge">
+			<br>
+				<center><div id="my_camera"></div></center>
+				<br><br>
+				<input type="text" name="idno" id="idno" class="w3-input w3-border" placeholder="IDNO">
+				<br>
+				<input type="text" name="lastname" id="lastname" class="w3-input w3-border" placeholder="LASTNAME">
+				<br>
+				<input type="text" name="firstname" id="firstname" class="w3-input w3-border" placeholder="FIRSTNAME"><br>
+				<input type="text" name="course" id="course" class="w3-input w3-border" placeholder="COURSE">
+				<br>
+				<input type="text" name="level" id="level" class="w3-input w3-border" placeholder="LEVEL">
+				<br><br>
+				<button onclick="take_snapshot()" class="w3-button w3-green">TAKE SNAPSHOT</button>
+				<button onclick="save_snapshot()" class="w3-button w3-green">SAVE SNAPSHOT</button>
+				<br><br>
+			</div>
+			<div class="w3-half">
+				<center><div id="result"></div></center>
+				<br><br>
+				<div class="w3-padding w3-border" id="myidno">IDNO</div>
+				<div class="w3-padding w3-border" id="mylastname">LASTNAME</div>
+				<div class="w3-padding w3-border" id="myfirstname">FIRSTNAME</div>
+				<div class="w3-padding w3-border" id="mycourse">COURSE</div>
+				<div class="w3-padding w3-border" id="mylevel">LEVEL</div>
+			</div>
+			
+		</div>
+		<script src="../static/js/webcam.min.js"></script>
+		<script>
+			Webcam.set({
+				width:320,
+				height:240,
+				image_type:'jpeg',
+				jpeg_quality:90
+			});
+			Webcam.attach("#my_camera");
+			function take_snapshot(){
+				Webcam.snap(function(data_uri){
+					document.getElementById('result').innerHTML="<img id='imageprev' src='"+data_uri+"'>";
+					document.getElementById('myidno').innerHTML=document.getElementById('idno').value;
+					document.getElementById('mylastname').innerHTML=document.getElementById('lastname').value;
+					document.getElementById('myfirstname').innerHTML=document.getElementById('firstname').value;
+					document.getElementById('mycourse').innerHTML=document.getElementById('course').value;
+					document.getElementById('mylevel').innerHTML=document.getElementById('level').value;
+				});
+			}
+			function save_snapshot(){
+				var base64image=document.getElementById('imageprev').src;
+				var idno=document.getElementById('idno').value;
+				var lastname=document.getElementById('lastname').value;
+				var firstname=document.getElementById('firstname').value;
+				var course=document.getElementById('course').value;
+				var level=document.getElementById('level').value;
+				Webcam.upload(base64image,"upload?idno="+idno+"&lastname="+lastname+"&firstname="+firstname+"&course="+course+"&level="+level,function(code,name){
+					alert("image uploaded...")
+					
+					document.getElementById('idno').value='';
+					document.getElementById('lastname').value='';
+					document.getElementById('firstname').value='';
+					document.getElementById('course').value='';
+					document.getElementById('level').value='';
+					document.getElementById('idno').focus();
+				});
+			}
+		</script>
+	</body>
+</html>
